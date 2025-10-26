@@ -9,11 +9,11 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await register(formData.name, formData.email, formData.password);
+    const result = await register(formData.name, formData.email, formData.password);
+    if (result.success) {
       navigate('/');
-    } catch (error) {
-      alert('Registration failed');
+    } else {
+      alert(result.message);
     }
   };
 

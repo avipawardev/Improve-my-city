@@ -22,17 +22,27 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const res = await axiosInstance.post('/auth/login', { email, password });
-    setUser(res.data);
-    localStorage.setItem('token', res.data.token);
-    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
+    try {
+      const res = await axiosInstance.post('/auth/login', { email, password });
+      setUser(res.data);
+      localStorage.setItem('token', res.data.token);
+      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
+      return { success: true };
+    } catch (error) {
+      return { success: false, message: error.response?.data?.message || 'Login failed' };
+    }
   };
 
   const register = async (name, email, password) => {
-    const res = await axiosInstance.post('/auth/register', { name, email, password });
-    setUser(res.data);
-    localStorage.setItem('token', res.data.token);
-    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
+    try {
+      const res = await axiosInstance.post('/auth/register', { name, email, password });
+      setUser(res.data);
+      localStorage.setItem('token', res.data.token);
+      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
+      return { success: true };
+    } catch (error) {
+      return { success: false, message: error.response?.data?.message || 'Registration failed' };
+    }
   };
 
   const logout = () => {

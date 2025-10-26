@@ -6,6 +6,7 @@ import ReportIssue from './pages/ReportIssue';
 import MyComplaints from './pages/MyComplaints';
 import AdminDashboard from './pages/AdminDashboard';
 import PublicDashboard from './pages/PublicDashboard';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const router = createBrowserRouter([
   {
@@ -22,15 +23,15 @@ const router = createBrowserRouter([
   },
   {
     path: '/report',
-    element: <ReportIssue />,
+    element: <ProtectedRoute><ReportIssue /></ProtectedRoute>,
   },
   {
     path: '/my-complaints',
-    element: <MyComplaints />,
+    element: <ProtectedRoute><MyComplaints /></ProtectedRoute>,
   },
   {
     path: '/admin',
-    element: <AdminDashboard />,
+    element: <ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>,
   },
   {
     path: '/public',
