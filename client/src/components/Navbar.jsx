@@ -58,8 +58,13 @@ const Navbar = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      // Implement search functionality
-      console.log("Searching for:", searchQuery);
+      if (user) {
+        navigate(`/my-complaints?search=${encodeURIComponent(searchQuery)}`);
+      } else {
+        navigate(`/public?search=${encodeURIComponent(searchQuery)}`);
+      }
+      setSearchQuery("");
+      setIsOpen(false);
     }
   };
 

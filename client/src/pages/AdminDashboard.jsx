@@ -6,6 +6,8 @@ import StatusBadge from '../components/StatusBadge';
 const AdminDashboard = () => {
   const [complaints, setComplaints] = useState([]);
   const [stats, setStats] = useState({});
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
 
   useEffect(() => {
     fetchComplaints();
@@ -14,11 +16,18 @@ const AdminDashboard = () => {
 
   const fetchComplaints = async () => {
     try {
-      const res = await axiosInstance.get('/admin/complaints');
+      const params = {};
+      if (search) params.search = search;
+      if (statusFilter) params.status = statusFilter;
+      const res = await axiosInstance.get('/admin/complaints', { params });
       setComplaints(res.data);
     } catch (error) {
       console.error('Error fetching complaints:', error);
     }
+  };
+
+  const handleSearch = () => {
+    fetchComplaints();
   };
 
   const fetchStats = async () => {
@@ -34,6 +43,7 @@ const AdminDashboard = () => {
     try {
       await axiosInstance.put(`/admin/complaints/${id}/status`, { status });
       fetchComplaints();
+      fetchStats();
     } catch (error) {
       alert('Failed to update status');
     }
@@ -45,6 +55,28 @@ const AdminDashboard = () => {
       <div className="container mx-auto p-8">
         <h2 className="text-2xl font-bold mb-6">Admin Dashboard</h2>
         
+        {/* Search */}
+        <div className="bg-white p-4 rounded shadow mb-6 flex gap-4">
+          <input
+            type="text"
+            placeholder="Search complaints..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+            className="flex-1 p-2 border rounded"
+          />
+          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="p-2 border rounded">
+            <option value="">All Status</option>
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Resolved">Resolved</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+          <button onClick={handleSearch} className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            Search
+          </button>
+        </div>
+
         {/* Stats */}
         <div className="grid grid-cols-4 gap-4 mb-8">
           <div className="bg-white p-4 rounded shadow">
