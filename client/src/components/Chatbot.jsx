@@ -9,10 +9,11 @@ const Chatbot = () => {
     if (!message.trim()) return;
 
     const userMessage = { text: message, sender: 'user' };
-    setChat([...chat, userMessage]);
+    const newChat = [...chat, userMessage];
+    setChat(newChat);
+    setMessage('');
 
     try {
-      // For now, simple response. In production, call backend API
       const response = await axiosInstance.post('/chatbot', { message });
       const botMessage = { text: response.data.reply, sender: 'bot' };
       setChat(prev => [...prev, botMessage]);
@@ -20,8 +21,6 @@ const Chatbot = () => {
       const botMessage = { text: 'Sorry, I couldn\'t process that.', sender: 'bot' };
       setChat(prev => [...prev, botMessage]);
     }
-
-    setMessage('');
   };
 
   return (

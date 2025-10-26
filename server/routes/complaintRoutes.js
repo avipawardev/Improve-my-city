@@ -6,14 +6,15 @@ const {
   updateComplaint,
   deleteComplaint,
 } = require('../controllers/complaintController');
-const { protect } = require('../middlewares/authMiddleware');
+const { protect, optionalAuth } = require('../middlewares/authMiddleware');
 const upload = require('../middlewares/uploadMiddleware');
+const { validateComplaint } = require('../middlewares/validateInput');
 
 const router = express.Router();
 
 router.route('/')
-  .get(protect, getComplaints)
-  .post(protect, upload.array('images', 5), createComplaint);
+  .get(optionalAuth, getComplaints)
+  .post(protect, upload.array('images', 5), validateComplaint, createComplaint);
 
 router.route('/:id')
   .get(protect, getComplaint)

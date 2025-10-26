@@ -17,20 +17,25 @@ const ReportIssue = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
-    Object.keys(formData).forEach(key => {
-      if (key === 'images' && formData[key]) {
-        for (let i = 0; i < formData[key].length; i++) {
-          data.append('images', formData[key][i]);
-        }
-      } else {
-        data.append(key, formData[key]);
+    data.append('title', formData.title);
+    data.append('description', formData.description);
+    data.append('category', formData.category);
+    
+    if (formData.location) {
+      data.append('location', JSON.stringify({ address: formData.location }));
+    }
+    
+    if (formData.images) {
+      for (let i = 0; i < formData.images.length; i++) {
+        data.append('images', formData.images[i]);
       }
-    });
+    }
+    
     try {
       await createComplaint(data);
       navigate('/my-complaints');
     } catch (error) {
-      alert('Failed to report issue');
+      alert('Failed to report issue: ' + (error.response?.data?.message || error.message));
     }
   };
 

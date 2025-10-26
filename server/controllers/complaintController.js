@@ -10,10 +10,8 @@ const getComplaints = async (req, res) => {
     let query = {};
 
     if (req.user) {
-      // If authenticated, show user's complaints or all if admin
-      if (req.user.role !== 'admin') {
-        query.user = req.user._id;
-      }
+      // If authenticated, show user's complaints
+      query.user = req.user._id;
     } else {
       // Public: only resolved complaints
       query.status = 'Resolved';
