@@ -92,13 +92,7 @@ const Footer = () => {
                   <MapPin className="w-7 h-7 text-blue-900" />
                 </div>
                 <div>
-                  <h3
-                    className="text-xl font-bold"
-                    style={{
-                      fontFamily:
-                        theme.typography.fontFamily.secondary.join(", "),
-                    }}
-                  >
+                  <h3 className="text-xl font-bold font-secondary">
                     Improve My City
                   </h3>
                   <p className="text-blue-200 text-sm">City Services Portal</p>

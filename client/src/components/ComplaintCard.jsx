@@ -70,8 +70,18 @@ const ComplaintCard = ({ complaint }) => {
       },
     },
     hover: {
-      y: -5,
-      transition: { duration: 0.2 },
+      y: -8,
+      scale: 1.02,
+      rotateX: 3,
+      boxShadow:
+        "0 20px 40px -12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(59, 130, 246, 0.1)",
+      transition: {
+        duration: 0.4,
+        ease: "easeOut",
+        type: "spring",
+        stiffness: 300,
+        damping: 20,
+      },
     },
   };
 
@@ -93,22 +103,63 @@ const ComplaintCard = ({ complaint }) => {
       className={`bg-white rounded-xl shadow-lg border-2 ${statusConfig.borderColor} overflow-hidden hover:shadow-xl transition-shadow duration-300`}
     >
       {/* Status Banner */}
-      <div
-        className={`${statusConfig.bgColor} px-4 py-3 border-b ${statusConfig.borderColor}`}
+      <motion.div
+        className={`${statusConfig.bgColor} px-4 py-3 border-b ${statusConfig.borderColor} relative overflow-hidden`}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.2 }}
       >
-        <div className="flex items-center space-x-2">
+        {/* Animated background gradient */}
+        <motion.div
+          className="absolute inset-0 opacity-20"
+          animate={{
+            background: [
+              `linear-gradient(45deg, ${statusConfig.color.replace(
+                "bg-",
+                ""
+              )}20, transparent)`,
+              `linear-gradient(135deg, ${statusConfig.color.replace(
+                "bg-",
+                ""
+              )}20, transparent)`,
+              `linear-gradient(225deg, ${statusConfig.color.replace(
+                "bg-",
+                ""
+              )}20, transparent)`,
+              `linear-gradient(315deg, ${statusConfig.color.replace(
+                "bg-",
+                ""
+              )}20, transparent)`,
+              `linear-gradient(45deg, ${statusConfig.color.replace(
+                "bg-",
+                ""
+              )}20, transparent)`,
+            ],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
+        <div className="flex items-center space-x-2 relative z-10">
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+            whileHover={{ scale: 1.2, rotate: 10 }}
           >
             <StatusIcon className={`w-5 h-5 ${statusConfig.textColor}`} />
           </motion.div>
-          <span className={`font-semibold ${statusConfig.textColor}`}>
+          <motion.span
+            className={`font-semibold ${statusConfig.textColor}`}
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
+          >
             {complaint.status}
-          </span>
+          </motion.span>
         </div>
-      </div>
+      </motion.div>
 
       <div className="p-6">
         <motion.h3
@@ -135,18 +186,45 @@ const ComplaintCard = ({ complaint }) => {
             variants={imageVariants}
             initial="hidden"
             animate="visible"
-            className="mb-4 relative group"
+            className="mb-4 relative group cursor-pointer"
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.3 }}
           >
             <div className="relative overflow-hidden rounded-lg">
               <motion.img
                 src={complaint.images[0]}
                 alt="Complaint"
-                className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-                whileHover={{ scale: 1.05 }}
+                className="w-full h-48 object-cover transition-transform duration-500"
+                whileHover={{
+                  scale: 1.1,
+                  filter: "brightness(1.1) contrast(1.05)",
+                }}
+                transition={{ duration: 0.5 }}
               />
-              <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
-                <ImageIcon className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
+              {/* Overlay effects */}
+              <motion.div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <motion.div
+                className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center"
+                initial={{ opacity: 0 }}
+                whileHover={{ opacity: 1 }}
+              >
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ImageIcon className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg" />
+                </motion.div>
+              </motion.div>
+              {/* Animated border */}
+              <motion.div
+                className="absolute inset-0 rounded-lg border-2 border-white/0 group-hover:border-white/30"
+                initial={{ opacity: 0 }}
+                whileHover={{
+                  opacity: 1,
+                  boxShadow: "0 0 20px rgba(255, 255, 255, 0.3)",
+                }}
+                transition={{ duration: 0.3 }}
+              />
             </div>
           </motion.div>
         )}
@@ -158,17 +236,36 @@ const ComplaintCard = ({ complaint }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <div className="flex items-center space-x-1 text-gray-500 text-sm">
-            <Calendar className="w-4 h-4" />
+          <motion.div
+            className="flex items-center space-x-1 text-gray-500 text-sm"
+            whileHover={{ scale: 1.05, x: 2 }}
+            transition={{ duration: 0.2 }}
+          >
+            <motion.div
+              whileHover={{ rotate: 10 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Calendar className="w-4 h-4" />
+            </motion.div>
             <span>{new Date(complaint.createdAt).toLocaleDateString()}</span>
-          </div>
+          </motion.div>
 
           {complaint.location && (
             <motion.div
               className="flex items-center space-x-1 text-gray-500 text-sm"
-              whileHover={{ scale: 1.05 }}
+              whileHover={{
+                scale: 1.05,
+                x: -2,
+                color: "#3b82f6",
+              }}
+              transition={{ duration: 0.2 }}
             >
-              <MapPin className="w-4 h-4" />
+              <motion.div
+                whileHover={{ rotate: -10 }}
+                transition={{ duration: 0.2 }}
+              >
+                <MapPin className="w-4 h-4" />
+              </motion.div>
               <span>Location</span>
             </motion.div>
           )}
@@ -177,11 +274,25 @@ const ComplaintCard = ({ complaint }) => {
 
       {/* Animated border effect */}
       <motion.div
-        className={`h-1 ${statusConfig.color}`}
+        className={`h-1 ${statusConfig.color} relative overflow-hidden`}
         initial={{ width: 0 }}
         animate={{ width: "100%" }}
         transition={{ duration: 0.8, delay: 0.5 }}
-      />
+      >
+        {/* Shimmer effect */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+          animate={{
+            x: ["-100%", "100%"],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1,
+          }}
+        />
+      </motion.div>
     </motion.div>
   );
 };

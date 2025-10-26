@@ -41,8 +41,8 @@ export const theme = {
 
   typography: {
     fontFamily: {
-      primary: ["Inter", "system-ui", "sans-serif"],
-      secondary: ["Poppins", "system-ui", "sans-serif"],
+      primary: ["Gilroy", "Inter", "system-ui", "sans-serif"],
+      secondary: ["Gilroy", "Poppins", "system-ui", "sans-serif"],
     },
     fontSize: {
       xs: ["0.75rem", { lineHeight: "1rem" }],
